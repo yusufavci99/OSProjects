@@ -1,12 +1,17 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/mman.h>
+#include <errno.h>
+#include <string.h>
 
 extern char initData1[];
 extern char initData2[];
 extern char unutilized1[];
 extern char unutilized2[];
 extern void nextStep();
+extern int factorial();
+extern int errno;
 
 int main() {
     // Step 1
@@ -22,21 +27,31 @@ int main() {
     
     printf("%s%d\n", "Process PID: ",getpid());
     nextStep();
+    printf("%s\n\n", "Step 2 Initiated");
     // Step 2
 
-    void *data1 = malloc(512 * 1024);
-    void *data2 = malloc(256 * 1024);
-    void *data3 = malloc(256 * 1024);
+    void *heap_data1 = malloc(512 * 1024);
+    void *heap_data2 = malloc(256 * 1024);
+    void *heap_data3 = malloc(256 * 1024);
+    void *heap_data4 = malloc(1024 * 1024);
 
-    printf("%s%lx\n", "Address of data1: ", (long unsigned int) data1);
-    printf("%s%lx\n", "Address of data2: ", (long unsigned int) data2);
-    printf("%s%lx\n", "Address of data3: ", (long unsigned int) data3);
-    nextStep();
-    printf("%s\n\n", "Step 2 Initiated");
+    printf("%s%lx\n", "Address of heap data1: ", (long unsigned int) heap_data1);
+    printf("%s%lx\n", "Address of heap data2: ", (long unsigned int) heap_data2);
+    printf("%s%lx\n", "Address of heap data3: ", (long unsigned int) heap_data3);
+    printf("%s%lx\n", "Address of heap data4: ", (long unsigned int) heap_data4);
+    
     nextStep();
     printf("%s\n\n", "Step 3 Initiated");
+
+    // stack size doesn't shrink https://stackoverflow.com/questions/8203110/will-the-stack-of-a-c-program-ever-shrink
+    printf("%s%d\n", "Fact: ", factorial(1024 * 100));
+  
     nextStep();
     printf("%s\n\n", "Step 4 Initiated");
+
+    void *memmap = mmap(NULL, 1024 * 1024, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%s%lx\n", "Address of map: ", (long unsigned int) memmap);
+
     nextStep();
     printf("%s\n\n", "Step 5 Initiated");
     nextStep();

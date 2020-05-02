@@ -54,6 +54,17 @@ int main() {
 
     nextStep();
     printf("%s\n\n", "Step 5 Initiated");
+
+    for (int i = 0; i < 1024 * 1024; i++) {
+        ((char *)memmap)[i] = i % 128;
+
+    }
+
+    for (int i = 0; i < 1024 * 1024; i++) {
+        printf("%c", ((char *)memmap)[i] );
+
+    }
+
     nextStep();
     printf("%s\n\n", "Step 6 Initiated");
     printf("%s\n", "Enter n to exit");

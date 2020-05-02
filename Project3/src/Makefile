@@ -11,3 +11,8 @@ module2.o: module2.c
 
 module3.o: module3.c
 	gcc -c -no-pie module3.c
+
+git:
+	git add -A
+	git commit -m "$m"
+	git push -u origin master

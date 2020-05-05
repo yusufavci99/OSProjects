@@ -1,3 +1,5 @@
+#define PAGESIZE 4096
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +51,17 @@ int main() {
     nextStep();
     printf("%s\n\n", "Step 4 Initiated");
 
+    printf("%s\n", "Creating File!");
+    FILE *fp = fopen("projectfile.txt", "w");
+
+    if (fp == NULL) {
+        printf("%s\n", "OH BOY");
+    }
+    //strerror(errno);
+    char *s = "abcdefg";
+    fprintf(fp, "%s", s);
+
+
     void *memmap = mmap(NULL, 1024 * 1024, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
     printf("%s%lx\n", "Address of map: ", (long unsigned int) memmap);
 
@@ -67,6 +80,15 @@ int main() {
 
     nextStep();
     printf("%s\n\n", "Step 6 Initiated");
+
+    void *mainPage = (void *) (PAGESIZE * (((long unsigned int) main) / PAGESIZE));
+
+    for( int i = 0; i < PAGESIZE; i += sizeof(char)) {
+        printf("%lx\n", (long unsigned int) (mainPage + i));
+        printf("%02X\n", ((short int *) mainPage)[i]);
+    }
+    printf("%lx\n", (long unsigned int) mainPage);
+
     printf("%s\n", "Enter n to exit");
     nextStep();
     return 0;//

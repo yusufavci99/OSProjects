@@ -1,0 +1,22 @@
+$ gdb ./a.out
+(gdb) run
+<segfault happens here>
+(gdb) backtrace
+<offending code is shown here>
+
+disass
+
+
+valgrind --leak-check=full ./app
+
+
+
+
+also
+
+
+
+#include <errno.h>
+extern int errno;
+
+printf("%s", strerror(errno));

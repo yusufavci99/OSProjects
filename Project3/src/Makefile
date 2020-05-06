@@ -12,6 +12,10 @@ module2.o: module2.c
 module3.o: module3.c
 	gcc -c -no-pie module3.c
 
+static_comp: module1.o module2.o module3.o
+	gcc -g -static -Wall -no-pie -o app module1.o module2.o module3.o
+
+
 git:
 	git add -A
 	git commit -m "$m"
